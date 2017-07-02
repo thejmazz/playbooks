@@ -1,0 +1,22 @@
+---
+- hosts: all
+  remote_user: root
+
+  vars_prompt:
+    - name: username
+      prompt: "Enter username"
+      private: no
+    - name: password
+      prompt: "Enter password"
+      private: yes
+      confirm: yes
+      encrypt: "sha512_crypt"
+      salt_size: 8
+
+  tasks:
+    - user:
+        name: "{{ username }}"
+        password: "{{ password }}"
+        update_password: on_create
+        groups: [ 'sudo' ]
+

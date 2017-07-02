@@ -1,0 +1,49 @@
+---
+- hosts: all
+  remote_user: root
+
+  vars:
+    backup_dir: /root/backups
+
+  vars_prompt:
+    - name: username
+      prompt: "Enter username"
+      private: no
+    - name: user_remove
+      prompt: "Delete user files? (will be asked to backup) (yes/no)"
+      private: no
+    - name: backup_user
+      prompt: "Backup user? (yes/no)"
+      private: no
+
+  tasks:
+    - name: "Validate user_remove"
+      fail:
+        msg: "Must choose 'yes' or 'no' for user_remove"
+      when: user_remove != 'yes' and user_remove != 'no'
+    - name: "Validate user_remove"
+      fail:
+        msg: "Must choose 'yes' or 'no' for backup_user"
+      when: backup_user != 'yes' and backup_user != 'no'
+
+    - pause:
+        prompt: "WARNING: about to remove user {{ username }} and potentially their files, continue? (Enter or Ctrl-c)"
+
+    - shell: "getent passwd {{ username }} | cut -d: -f6"
+      register: user_home
+
+    - name: "Ensure backup directory exists"
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+      when: backup_user == 'yes'
+
+    - archive:
+        path: "{{ user_home.stdout_lines }}"
+        dest: "{{ backup_dir }}/{{ username }}_{{ ansible_date_time.date }}.tar.gz"
+      when: backup_user == 'yes'
+
+    - user:
+        name: "{{ username }}"
+        state: absent
+        remove: "{{ user_remove }}"

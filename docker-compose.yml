@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  ansible:
+    build: .
+    working_dir: /root
+    volumes:
+      - ./hosts:/etc/ansible/hosts
+      - ./plays:/root/plays
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+
+networks:
+  default:
+    external:
+      name: bridge
+
