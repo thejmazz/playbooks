@@ -2,6 +2,9 @@
 - hosts: all
   remote_user: root
 
+  vars:
+    - public_key: "{{ lookup('env','PUBLIC_KEY') }}"
+
   vars_prompt:
     - name: username
       prompt: "Enter username"
@@ -19,4 +22,9 @@
         password: "{{ password }}"
         update_password: on_create
         groups: [ 'sudo' ]
+    - authorized_key:
+        user: "{{ username }}"
+        state: present
+        key: "{{ public_key }}"
+      when: public_key != ""
 

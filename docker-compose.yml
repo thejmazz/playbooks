@@ -8,6 +8,8 @@ services:
       - ./hosts:/etc/ansible/hosts
       - ./plays:/root/plays
       - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+    environment:
+      - PUBLIC_KEY
 
 networks:
   default:
