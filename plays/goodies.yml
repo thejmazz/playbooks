@@ -1,0 +1,25 @@
+---
+- hosts: all
+
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - apt_repository: "repo=ppa:neovim-ppa/stable"
+    - apt: "update_cache=yes"
+    - apt: name={{ item }}
+      with_items:
+        - software-properties-common # for apt-add-repository
+        - curl
+        - htop
+        - python-dev
+        - python-pip
+        - python3-dev
+        - python3-pip
+        - neovim
+    - get_url:
+        url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
+        dest: /usr/local/bin/yadm
+        mode: a+x
+
