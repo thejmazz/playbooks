@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  remote_user: root
 
   vars:
     - public_key: "{{ lookup('env','PUBLIC_KEY') }}"
