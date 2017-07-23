@@ -1,5 +1,60 @@
 # Some Plays
 
+My playbooks for, given a blank install of
+
+- Ubuntu 16.04 (currently supported)
+- Arch Linux (todo)
+- MacOS (todo)
+
+get up to speed with my preferred configurations and programs, and in the case
+of an external server, be prepared to serve https requests via [Let's
+Encrypt][letsencrpypt]. These playbooks make use of, or are used from, my
+[dotfiles][dottos] managed by [yadm][yadm].
+
+[dottos]: https://github.com/thejmazz/dottos
+[yadm]: https://github.com/TheLocehiliosan/yadm
+[letsencrpypt]: https://letsencrypt.org/
+
+Eventually it should support root and non-root access. For example, install
+programs to `~/bin` if root access is not available.
+
+I have purposefully left out configuration such as
+
+```yaml
+become: yes
+remote_user: root
+become_method: sudo
+```
+
+since it makes more sense to set these as applicable from the CLI, imho.  The
+above equivalent in CLI arguments is `-b -u root -K` or `--become --user root
+--ask-become-pass`. (Note the default for `--user` is root).
+
+If you do not have an ssh key for root, use `-k` or `--ask-pass`. If you do
+have an ssh key for root, ensure it is added to your ssh-agent, or use
+`--private-key=PRIVATE_KEY_FILE`.
+
+For choosing hosts, you can make your own `hosts` file and then set it with
+`-i hosts`. Alternatively you can pass a comma seperated host list (with a
+comma at the end) like `-i "127.0.0.1,"`.
+
+Take care when running through a docker container - ssh keys, `know_hosts`,
+etc, will need to be volume mounted in.
+
+## 0. Install programs as root
+
+This is required to be done before creating a user since the user uses these
+programs (specifically, commands in [`~/.yadm/bootstrap`][bootstrap] may fail).
+This can be skipped if instead your yadm bootstrap runs ansible with the
+localhost as targer.
+
+*This step should be optional. I have still yet to organize the differences
+between root and non-root setups.*
+
+[bootstrap]: https://github.com/thejmazz/dottos/blob/master/.yadm/bootstrap
+
+## 1. Create your user
+
 To create a new user:
 
 ```bash
@@ -12,3 +67,18 @@ To delete a user (prompted for delete home + backup)
 ```bash
 docker-compose run --rm ansible ./plays/delete-user.yml --ask-pass
 ```
+
+## Todos
+
+- [ ] tpm
+- [ ] `bind-key -t vi-copy v begin-selection` unkown command
+- [ ] prefix
+- [ ] statusline
+- [ ] colors (for windows, status)
+- [ ] tab switching
+- [ ] choose interface for ifstat
+- [ ] local nvim
+- [ ] local tmux
+- [ ] local yadm
+- [ ] packer support for Digital Ocean, AWS, etc
+- [ ] docker entrypoint that adds keys to ssh-agent
