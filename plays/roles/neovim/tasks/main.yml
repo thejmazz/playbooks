@@ -1,0 +1,10 @@
+---
+- apt_repository: "repo=ppa:neovim-ppa/stable"
+- apt: name={{ item }}
+  with_items:
+    - python-dev
+    - python-pip
+    - python3-dev
+    - python3-pip
+    - neovim
+- pip: "name=neovim executable=pip3"

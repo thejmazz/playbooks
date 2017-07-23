@@ -1,52 +1,30 @@
 ---
-- hosts: all
+- vars:
+    ansible_python_interpreter: "/usr/bin/python3"
+
+  pre_tasks:
+    - raw: apt-get install python-minimal aptitude -y # in case aptitude is not available
+    - apt: update_cache=yes upgrade=dist
+    - apt: name=software-properties-common # for apt-add-repository
+    - locale_gen: name=en_US.UTF-8
 
   tasks:
-    - apt_repository: "repo=ppa:neovim-ppa/stable"
-    - apt: "update_cache=yes"
     - apt: name={{ item }}
       with_items:
-        - software-properties-common # for apt-add-repository
         - curl
         - htop
-        - python-dev
-        - python-pip
-        - python3-dev
-        - python3-pip
-        - neovim
-    - pip: "name=neovim executable=pip3"
+
     - get_url:
-        url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
-        dest: /usr/local/bin/yadm
-        mode: a+x
+      url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
+      dest: /usr/local/bin/yadm
+      mode: a+x
 
     # - apt: "name=language-pack-en"
-    - locale_gen:
-        name: en_CA.UTF-8
-
-    # tmux
-    - apt: name={{ item }}
-      with_items:
-        - libevent-dev
-        - libncurses-dev
-        - ifstat
-    - get_url:
-        url: "https://github.com/tmux/tmux/releases/download/{{ tmux_version }}/tmux-{{ tmux_version }}.tar.gz"
-        dest: /usr/local/src
-      register: tmux_download
-      vars:
-        tmux_version: 2.5
-    - unarchive:
-        src: "{{ tmux_download.dest }}"
-        dest: /usr/local/src
-        remote_src: yes
-      register: tmux_unarchive
-    - shell: "./configure && make && make install"
-      args:
-        chdir: "/usr/local/src/tmux-2.5"
 
   roles:
     - role: angstwad.docker_ubuntu
       docker_pkg_name: docker-ce=17.06.0*
       docker_opts: "--bip 10.100.0.1/24"
       pip_version_docker_compose: 1.14.0
+    - role: tmux
+    - role: neovim
