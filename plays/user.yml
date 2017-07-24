@@ -2,7 +2,7 @@
 - hosts: all
 
   vars:
-    - public_key: "{{ lookup('env','PUBLIC_KEY') }}"
+    ansible_python_interpreter: "/usr/bin/env python3"
 
   vars_prompt:
     - name: username
@@ -19,13 +19,13 @@
     - user:
         name: "{{ username }}"
         password: "{{ password }}"
-        shell: /bin/bash
+        shell: /bin/zsh
         update_password: on_create
-        groups: [ 'sudo' ]
+        groups: [ 'sudo', 'docker' ]
     - authorized_key:
         user: "{{ username }}"
         state: present
-        key: "{{ public_key }}"
+        key: "{{ lookup('file', public_key) }}"
       when: public_key != ""
     - command: "yadm clone https://github.com/thejmazz/dottos.git --bootstrap"
       become: yes
