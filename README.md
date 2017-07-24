@@ -83,6 +83,7 @@ ansible ./plays/delete-user.yml --ask-pass
 - [ ] docker entrypoint that adds keys to ssh-agent
 - [ ] vim tab color to match tmux tabs
 - [ ] run ansible with target localhost from yadm bootstrap
+- [ ] don't run container as root
 
 [bootstrap]: https://github.com/thejmazz/dottos/blob/master/.yadm/bootstrap
 [dottos]: https://github.com/thejmazz/dottos
