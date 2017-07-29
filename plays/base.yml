@@ -15,6 +15,7 @@
         - curl
         - htop
         - zsh
+        - mosh
 
   roles:
     - role: angstwad.docker_ubuntu
