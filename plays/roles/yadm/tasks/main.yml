@@ -3,3 +3,4 @@
     url: https://github.com/TheLocehiliosan/yadm/raw/master/yadm
     dest: /usr/local/bin/yadm
     mode: a+x
+    force: yes
