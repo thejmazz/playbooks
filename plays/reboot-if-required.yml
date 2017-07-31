@@ -1,0 +1,29 @@
+---
+- hosts: all
+
+  vars:
+    ansible_python_interpreter: "/usr/bin/env python3"
+
+  tasks:
+    - name: prompt user to continue
+      pause:
+        prompt: 'Press return to reboot nodes (if required), else Ctrl-c then "a"'
+
+    - name: reboot nodes
+      shell: sleep 2 && shutdown -r now "Ansible reboot"
+      args:
+        removes: /var/run/reboot-required
+      async: 1
+      poll: 0
+      ignore_errors: true
+      register: reboot
+
+    - name: wait for server to come back
+      local_action: wait_for
+      when: reboot|changed
+      args:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        delay: 10
+        timeout: 300

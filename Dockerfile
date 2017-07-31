@@ -3,6 +3,7 @@ FROM ubuntu:16.04
 RUN apt update && apt install -y \
 git \
 python-pip \
+python3-pip python3-dev \
 sshpass \
 openssh-client
 
