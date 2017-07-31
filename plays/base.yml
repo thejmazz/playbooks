@@ -17,6 +17,7 @@
         - zsh
         - mosh
         - cmake
+        - ncdu
         # https://serverfault.com/a/706494/312364
         - libpam-systemd
         - dbus
