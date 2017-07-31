@@ -1,0 +1,10 @@
+---
+- apt: name={{ item }}
+  with_items:
+    - python-pip
+    - python3-dev
+    - gcc
+- pip: name={{ item }}
+  with_items:
+    - glances
+    - bottle

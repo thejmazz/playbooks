@@ -27,8 +27,10 @@ above equivalent in CLI arguments is `-b -u root -K` or `--become --user root
 --ask-become-pass`. (Note the default for `--user` is root).
 
 If you do not have an ssh key for root, use `-k` or `--ask-pass`. If you do
-have an ssh key for root, ensure it is added to your ssh-agent, or use
-`--private-key=PRIVATE_KEY_FILE`.
+have an ssh key for root, ensure it is added to your ssh-agent (this wont work
+through docker), or use `--private-key=PRIVATE_KEY_FILE`. *Note*. Using a key
+does not work currently since there are file permission and ownership issues
+concerning `~/.ssh`.
 
 For choosing hosts, you can make your own `hosts` file and then set it with
 `-i hosts`. Alternatively you can pass a comma seperated host list (with a
@@ -36,7 +38,11 @@ comma at the end) like `-i "127.0.0.1,"`.
 
 Take care when running through a docker container - ssh keys, `know_hosts`,
 etc, will need to be volume mounted in. When running through docker, use
-`docker-compose run --rm ansible` in place of `ansible`.
+`docker-compose run --rm ansible` in place of `ansible`:
+
+```bash
+alias ansible="docker-compose run --rm ansible"
+```
 
 ## 0. Install programs as root
 
@@ -50,6 +56,13 @@ between root and non-root setups.*
 
 ```bash
 ansible ./plays/base.yml -i "127.0.0.1," --ask-pass
+```
+
+*Note*
+You'll need to install the roles locally:
+
+```bash
+ansible-galaxy install -r requirements.yml --roles-path ./roles
 ```
 
 ## 1. Create your user
@@ -81,6 +94,7 @@ ansible ./plays/delete-user.yml --ask-pass
 - [ ] local yadm
 - [ ] packer support for Digital Ocean, AWS, etc
 - [ ] docker entrypoint that adds keys to ssh-agent
+- [ ] docker entrypoint handles `~/.ssh` owner UID and GID
 - [ ] vim tab color to match tmux tabs
 - [ ] run ansible with target localhost from yadm bootstrap
 - [ ] don't run container as root

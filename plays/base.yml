@@ -16,6 +16,10 @@
         - htop
         - zsh
         - mosh
+        - cmake
+        # https://serverfault.com/a/706494/312364
+        - libpam-systemd
+        - dbus
 
   roles:
     - role: angstwad.docker_ubuntu
@@ -26,3 +30,4 @@
     - role: tmux
     - role: neovim
     - role: yadm
+    - role: glances
