@@ -4,13 +4,11 @@ services:
   ansible:
     build: .
     working_dir: /root
+    network_mode: host
     volumes:
       - ./hosts:/etc/ansible/hosts
       - ./plays:/root/plays
-      - ~/.ssh:/root/.ssh
-
-networks:
-  default:
-    external:
-      name: bridge
+      - $SSH_AUTH_SOCK:/ssh-agent
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
 
