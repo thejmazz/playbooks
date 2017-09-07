@@ -3,6 +3,7 @@ version: '2'
 services:
   ansible:
     build: .
+    image: thejmazz/ansible
     working_dir: /root
     network_mode: host
     volumes:
