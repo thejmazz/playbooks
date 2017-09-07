@@ -1,6 +1,21 @@
 ---
 - hosts: all
 
+  # this is so that we can install python 2 via raw ssh
+  gather_facts: false
+
+  pre_tasks:
+    - name: Install aptitude in case not available
+      raw: test -e /usr/bin/apt || (apt-get -y update && apt-get install -y aptitude)
+      register: output
+      changed_when: output.stdout != ""
+    - name: Install python 2 in case not available
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      register: output
+      changed_when: output.stdout != ""
+    - name: Gathering facts
+      setup:
+
   roles:
     - role: tmux
     - role: neovim
