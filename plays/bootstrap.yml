@@ -17,5 +17,6 @@
       setup:
 
   roles:
+    - role: base-apt-packages
     - role: tmux
     - role: neovim

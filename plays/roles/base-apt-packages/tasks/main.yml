@@ -1,0 +1,15 @@
+---
+- apt: name=software-properties-common # for apt-add-repository
+- apt: name={{ item }}
+  with_items:
+    - unattended-upgrades
+    - curl
+    - htop
+    - zsh
+    - mosh
+    - cmake
+    - ncdu
+    - iperf3
+    # https://serverfault.com/a/706494/312364
+    - libpam-systemd
+    - dbus
