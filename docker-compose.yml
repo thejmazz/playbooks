@@ -9,6 +9,7 @@ services:
     volumes:
       - ./hosts:/etc/ansible/hosts
       - ./plays:/root/plays
+      - ./id_rsa:/root/.ssh/id_rsa
       - $SSH_AUTH_SOCK:/ssh-agent
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
